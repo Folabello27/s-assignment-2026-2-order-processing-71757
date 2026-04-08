@@ -1,0 +1,197 @@
+@page "/checkout"
+@inject CartService CartService
+@inject OrderService OrderService
+@inject NavigationManager Navigation
+
+<PageTitle>Checkout - SportsStore</PageTitle>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Checkout</h2>
+
+    @if (CartService.Items.Count == 0)
+    {
+        <div class="alert alert-warning">
+            Your cart is empty. <a href="/">Continue shopping</a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Shipping Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <EditForm Model="checkoutModel" OnValidSubmit="HandleSubmit">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary class="text-danger" />
+
+                            <div class="mb-3">
+                                <label class="form-label">Full Name</label>
+                                <InputText @bind-Value="checkoutModel.Name" class="form-control" />
+                                <ValidationMessage For="() => checkoutModel.Name" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Address Line 1</label>
+                                <InputText @bind-Value="checkoutModel.Line1" class="form-control" />
+                                <ValidationMessage For="() => checkoutModel.Line1" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Address Line 2</label>
+                                <InputText @bind-Value="checkoutModel.Line2" class="form-control" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Address Line 3</label>
+                                <InputText @bind-Value="checkoutModel.Line3" class="form-control" />
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">City</label>
+                                    <InputText @bind-Value="checkoutModel.City" class="form-control" />
+                                    <ValidationMessage For="() => checkoutModel.City" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">State</label>
+                                    <InputText @bind-Value="checkoutModel.State" class="form-control" />
+                                    <ValidationMessage For="() => checkoutModel.State" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Zip Code</label>
+                                    <InputText @bind-Value="checkoutModel.Zip" class="form-control" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Country</label>
+                                    <InputText @bind-Value="checkoutModel.Country" class="form-control" />
+                                    <ValidationMessage For="() => checkoutModel.Country" />
+                                </div>
+                            </div>
+
+                            <div class="mb-3 form-check">
+                                <InputCheckbox @bind-Value="checkoutModel.GiftWrap" class="form-check-input" />
+                                <label class="form-check-label">Gift wrap these items</label>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(errorMessage))
+                            {
+                                <div class="alert alert-danger">@errorMessage</div>
+                            }
+
+                            <button type="submit" class="btn btn-primary" disabled="@isSubmitting">
+                                @if (isSubmitting)
+                                {
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    <span class="ms-2">Processing...</span>
+                                }
+                                else
+                                {
+                                    <span>Complete Order</span>
+                                }
+                            </button>
+                        </EditForm>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Order Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            @foreach (var item in CartService.Items)
+                            {
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>@item.ProductName x @item.Quantity</span>
+                                    <span>@((item.UnitPrice * item.Quantity).ToString("C"))</span>
+                                </li>
+                            }
+                            <li class="list-group-item d-flex justify-content-between fw-bold">
+                                <span>Total</span>
+                                <span>@CartService.Total.ToString("C")</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private CheckoutModel checkoutModel = new();
+    private bool isSubmitting = false;
+    private string? errorMessage;
+
+    private async Task HandleSubmit()
+    {
+        isSubmitting = true;
+        errorMessage = null;
+
+        try
+        {
+            var request = new CheckoutRequest
+            {
+                CustomerId = Guid.NewGuid().ToString(),
+                Name = checkoutModel.Name!,
+                Line1 = checkoutModel.Line1!,
+                Line2 = checkoutModel.Line2,
+                Line3 = checkoutModel.Line3,
+                City = checkoutModel.City!,
+                State = checkoutModel.State,
+                Zip = checkoutModel.Zip,
+                Country = checkoutModel.Country!,
+                GiftWrap = checkoutModel.GiftWrap
+            };
+
+            var result = await CartService.CheckoutAsync(request);
+            if (result != null)
+            {
+                Navigation.NavigateTo($"/order-confirmation/{result.OrderId}");
+            }
+            else
+            {
+                errorMessage = "Failed to place order. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    public class CheckoutModel
+    {
+        [Required(ErrorMessage = "Please enter your name")]
+        public string? Name { get; set; }
+
+        [Required(ErrorMessage = "Please enter your address")]
+        public string? Line1 { get; set; }
+
+        public string? Line2 { get; set; }
+        public string? Line3 { get; set; }
+
+        [Required(ErrorMessage = "Please enter your city")]
+        public string? City { get; set; }
+
+        public string? State { get; set; }
+        public string? Zip { get; set; }
+
+        [Required(ErrorMessage = "Please enter your country")]
+        public string? Country { get; set; }
+
+        public bool GiftWrap { get; set; }
+    }
+}
