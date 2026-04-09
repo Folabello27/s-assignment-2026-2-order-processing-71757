@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: sportsstore-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  orderapi:
+    build:
+      context: .
+      dockerfile: SportsStore.OrderApi/Dockerfile
+    container_name: sportsstore-orderapi
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+      - ConnectionStrings__DefaultConnection=Data Source=orders.db
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  inventoryservice:
+    build:
+      context: .
+      dockerfile: SportsStore.InventoryService/Dockerfile
+    container_name: sportsstore-inventory
+    environment:
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  paymentservice:
+    build:
+      context: .
+      dockerfile: SportsStore.PaymentService/Dockerfile
+    container_name: sportsstore-payment
+    environment:
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  shippingservice:
+    build:
+      context: .
+      dockerfile: SportsStore.ShippingService/Dockerfile
+    container_name: sportsstore-shipping
+    environment:
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  blazor:
+    build:
+      context: .
+      dockerfile: SportsStore/Dockerfile
+    container_name: sportsstore-blazor
+    ports:
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5001
+      - OrderApi__BaseUrl=http://orderapi:5000
+    depends_on:
+      - orderapi
+
+  admin:
+    build:
+      context: ./sportsstore-admin
+      dockerfile: Dockerfile
+    container_name: sportsstore-admin
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_API_URL=http://orderapi:5000/api
+    depends_on:
+      - orderapi
+
+networks:
+  default:
+    name: sportsstore-network

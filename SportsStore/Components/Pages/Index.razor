@@ -1,0 +1,149 @@
+@page "/"
+@inject ProductService ProductService
+@inject CartService CartService
+@inject NavigationManager Navigation
+
+<PageTitle>Products - SportsStore</PageTitle>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Categories</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <button class="list-group-item list-group-item-action @(SelectedCategory == null ? "active" : "")"
+                                @onclick="() => SelectCategory(null)">
+                            All Products
+                        </button>
+                        @foreach (var category in Categories)
+                        {
+                            <button class="list-group-item list-group-item-action @(SelectedCategory == category ? "active" : "")"
+                                    @onclick="() => SelectCategory(category)">
+                                @category
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <h2 class="mb-4">@(SelectedCategory ?? "All Products")</h2>
+
+            @if (IsLoading)
+            {
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            }
+            else if (Products.Count == 0)
+            {
+                <div class="alert alert-info">No products found.</div>
+            }
+            else
+            {
+                <div class="row">
+                    @foreach (var product in Products)
+                    {
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">@product.Name</h5>
+                                    <p class="card-text text-muted">@product.Category</p>
+                                    <p class="card-text">@product.Description</p>
+                                    <p class="card-text">
+                                        <strong class="text-primary">@product.Price.ToString("C")</strong>
+                                    </p>
+                                    <button class="btn btn-success w-100" @onclick="() => AddToCart(product)">
+                                        <i class="fas fa-cart-plus"></i> Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item @(CurrentPage == 1 ? "disabled" : "")">
+                            <button class="page-link" @onclick="() => ChangePage(CurrentPage - 1)">Previous</button>
+                        </li>
+                        @for (int i = 1; i <= TotalPages; i++)
+                        {
+                            var pageNumber = i;
+                            <li class="page-item @(CurrentPage == pageNumber ? "active" : "")">
+                                <button class="page-link" @onclick="() => ChangePage(pageNumber)">@pageNumber</button>
+                            </li>
+                        }
+                        <li class="page-item @(CurrentPage == TotalPages ? "disabled" : "")">
+                            <button class="page-link" @onclick="() => ChangePage(CurrentPage + 1)">Next</button>
+                        </li>
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<ProductDto> Products { get; set; } = new();
+    private List<string> Categories { get; set; } = new();
+    private string? SelectedCategory { get; set; }
+    private int CurrentPage { get; set; } = 1;
+    private int TotalPages { get; set; } = 1;
+    private bool IsLoading { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCategories();
+        await LoadProducts();
+    }
+
+    private async Task LoadCategories()
+    {
+        // Categories are hardcoded for now
+        Categories = new List<string> { "Watersports", "Soccer", "Chess" };
+    }
+
+    private async Task LoadProducts()
+    {
+        IsLoading = true;
+        try
+        {
+            var products = await ProductService.GetProductsAsync(SelectedCategory, CurrentPage, 9);
+            if (products != null)
+            {
+                Products = products;
+                TotalPages = (Products.Count + 8) / 9; // Rough calculation
+            }
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task SelectCategory(string? category)
+    {
+        SelectedCategory = category;
+        CurrentPage = 1;
+        await LoadProducts();
+    }
+
+    private async Task ChangePage(int page)
+    {
+        if (page < 1 || page > TotalPages) return;
+        CurrentPage = page;
+        await LoadProducts();
+    }
+
+    private void AddToCart(ProductDto product)
+    {
+        CartService.AddItem(product, 1);
+    }
+}

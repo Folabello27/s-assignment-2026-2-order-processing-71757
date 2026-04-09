@@ -1,0 +1,162 @@
+name: CI/CD Build and Test
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  NODE_VERSION: '20.x'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+
+    - name: Test
+      run: dotnet test --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v4
+      if: success()
+      with:
+        files: '**/coverage.cobertura.xml'
+        flags: unittests
+
+    - name: Publish Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: '**/TestResults/*.trx'
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and push OrderApi
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./SportsStore.OrderApi/Dockerfile
+        push: false
+        tags: sportsstore/orderapi:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Build and push Inventory Service
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./SportsStore.InventoryService/Dockerfile
+        push: false
+        tags: sportsstore/inventory:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Build and push Payment Service
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./SportsStore.PaymentService/Dockerfile
+        push: false
+        tags: sportsstore/payment:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Build and push Shipping Service
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./SportsStore.ShippingService/Dockerfile
+        push: false
+        tags: sportsstore/shipping:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Build and push Blazor UI
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./SportsStore/Dockerfile
+        push: false
+        tags: sportsstore/blazor:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  build-react:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./sportsstore-admin
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build
+      env:
+        CI: false
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: react-build
+        path: sportsstore-admin/build
+
+  test-react:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./sportsstore-admin
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests
+      run: npm test -- --coverage --watchAll=false

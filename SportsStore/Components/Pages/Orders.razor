@@ -1,0 +1,105 @@
+@page "/orders"
+@inject CustomerIdentityService CustomerIdentityService
+@inject OrderService OrderService
+
+<PageTitle>My Orders - SportsStore</PageTitle>
+
+<div class="container mt-4">
+    <h2 class="mb-4">My Orders</h2>
+
+    @if (IsLoading)
+    {
+        <div class="text-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    }
+    else if (OrdersList.Count == 0)
+    {
+        <div class="alert alert-info">
+            You haven't placed any orders yet. <a href="/">Start shopping</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Order #</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th class="text-end">Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in OrdersList)
+                    {
+                        <tr>
+                            <td>#@order.OrderId</td>
+                            <td>@order.CreatedAt.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                <span class="badge @GetStatusClass(order.OrderStatus)">
+                                    @order.OrderStatus
+                                </span>
+                            </td>
+                            <td class="text-end">@order.TotalAmount.ToString("C")</td>
+                            <td class="text-end">
+                                <a href="/order-details/@order.OrderId" class="btn btn-sm btn-outline-primary">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@code {
+    private List<OrderResponseDto> OrdersList { get; set; } = new();
+    private bool IsLoading { get; set; } = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        await LoadOrders();
+        StateHasChanged();
+    }
+
+    private async Task LoadOrders()
+    {
+        IsLoading = true;
+        try
+        {
+            var customerId = await CustomerIdentityService.GetCustomerIdAsync();
+            var orders = await OrderService.GetCustomerOrdersAsync(customerId);
+            if (orders != null)
+            {
+                OrdersList = orders;
+            }
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private string GetStatusClass(string status)
+    {
+        return status switch
+        {
+            "Completed" => "bg-success",
+            "Failed" => "bg-danger",
+            "Cancelled" => "bg-secondary",
+            _ => "bg-primary"
+        };
+    }
+}

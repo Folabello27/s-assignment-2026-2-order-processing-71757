@@ -1,0 +1,58 @@
+@inherits LayoutComponentBase
+
+<div class="page">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">SPORTS STORE</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">Products</NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/orders">My Orders</NavLink>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/cart">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                            @if (CartService.ItemCount > 0)
+                            {
+                                <span class="badge bg-danger ms-1">@CartService.ItemCount</span>
+                            }
+                        </NavLink>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="content">
+        @Body
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted">&copy; 2025 SportsStore. All rights reserved.</span>
+        </div>
+    </footer>
+</div>
+
+@code {
+    [Inject]
+    private CartService CartService { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        CartService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        CartService.OnChange -= StateHasChanged;
+    }
+}
