@@ -1,9 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Row, Col, Spinner } from 'react-bootstrap';
+<<<<<<< HEAD
 import { DashboardSummary, orderApi } from '../api/orderApi';
 
 const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<DashboardSummary | null>(null);
+=======
+
+interface DashboardStats {
+  totalOrders: number;
+  pendingOrders: number;
+  processingOrders: number;
+  completedOrders: number;
+  failedOrders: number;
+  totalRevenue: number;
+}
+
+const Dashboard: React.FC = () => {
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -13,9 +28,17 @@ const Dashboard: React.FC = () => {
 
   const fetchStats = async () => {
     try {
+<<<<<<< HEAD
       const data = await orderApi.getDashboardSummary();
       setStats(data);
     } catch {
+=======
+      const response = await fetch('http://localhost:5000/api/orders/dashboard');
+      if (!response.ok) throw new Error('Failed to fetch stats');
+      const data = await response.json();
+      setStats(data);
+    } catch (err) {
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
       setError('Unable to connect to Order API. Make sure OrderApi is running.');
     } finally {
       setLoading(false);
@@ -61,10 +84,17 @@ const Dashboard: React.FC = () => {
           </Card>
         </Col>
         <Col md={4}>
+<<<<<<< HEAD
               <Card bg="info" text="white">
             <Card.Body>
               <Card.Title>Processing</Card.Title>
               <h1>{(stats?.ordersByStatus?.ShippingCreated || 0) + (stats?.ordersByStatus?.ShippingPending || 0) + (stats?.ordersByStatus?.PaymentPending || 0)}</h1>
+=======
+          <Card bg="info" text="white">
+            <Card.Body>
+              <Card.Title>Processing</Card.Title>
+              <h1>{stats?.processingOrders || 0}</h1>
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
             </Card.Body>
           </Card>
         </Col>

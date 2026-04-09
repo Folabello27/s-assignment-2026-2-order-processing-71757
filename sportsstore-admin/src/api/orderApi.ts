@@ -18,6 +18,7 @@ export interface Order {
   itemCount: number;
   createdAt: string;
   updatedAt?: string;
+<<<<<<< HEAD
   line1?: string;
   line2?: string;
   line3?: string;
@@ -52,6 +53,8 @@ export interface Order {
     shippedAt?: string;
     status: string;
   };
+=======
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
 }
 
 export interface PaginatedOrdersResponse {

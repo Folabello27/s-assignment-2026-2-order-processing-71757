@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SportsStore - Distributed Order Processing Platform
 
 A full-stack e-commerce application built with .NET 10, Blazor, React, and RabbitMQ for event-driven order processing.
@@ -159,3 +160,6 @@ Environment variables:
 ## License
 
 MIT
+=======
+# Order Processing Assignment 
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00

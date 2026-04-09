@@ -25,7 +25,10 @@ services:
       - "5000:5000"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+<<<<<<< HEAD
       - ASPNETCORE_URLS=http://+:5000
+=======
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
       - RabbitMQ__Host=rabbitmq
       - RabbitMQ__Port=5672
       - RabbitMQ__Username=guest
@@ -86,7 +89,10 @@ services:
       - "5001:5001"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+<<<<<<< HEAD
       - ASPNETCORE_URLS=http://+:5001
+=======
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
       - OrderApi__BaseUrl=http://orderapi:5000
     depends_on:
       - orderapi
@@ -97,7 +103,11 @@ services:
       dockerfile: Dockerfile
     container_name: sportsstore-admin
     ports:
+<<<<<<< HEAD
       - "3000:80"
+=======
+      - "3000:3000"
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
     environment:
       - REACT_APP_API_URL=http://orderapi:5000/api
     depends_on:

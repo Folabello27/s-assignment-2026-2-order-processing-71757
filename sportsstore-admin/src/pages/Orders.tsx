@@ -1,7 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Spinner, Badge, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+<<<<<<< HEAD
 import { Order, orderApi } from '../api/orderApi';
+=======
+
+interface Order {
+  id: number;
+  customerName: string;
+  customerEmail: string;
+  status: string;
+  totalAmount: number;
+  createdAt: string;
+}
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
 
 const Orders: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -14,9 +26,17 @@ const Orders: React.FC = () => {
 
   const fetchOrders = async () => {
     try {
+<<<<<<< HEAD
       const data = await orderApi.getOrders();
       setOrders(data.orders);
     } catch {
+=======
+      const response = await fetch('http://localhost:5000/api/orders');
+      if (!response.ok) throw new Error('Failed to fetch orders');
+      const data = await response.json();
+      setOrders(data);
+    } catch (err) {
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
       setError('Unable to connect to Order API');
     } finally {
       setLoading(false);
@@ -25,11 +45,20 @@ const Orders: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     const statusColors: Record<string, string> = {
+<<<<<<< HEAD
       Submitted: 'secondary',
       PaymentPending: 'primary',
       ShippingPending: 'info',
       ShippingCreated: 'info',
       Completed: 'success',
+=======
+      Pending: 'secondary',
+      InventoryChecked: 'info',
+      PaymentApproved: 'primary',
+      Shipped: 'success',
+      Completed: 'success',
+      Cancelled: 'danger',
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
       Failed: 'danger'
     };
     return <Badge bg={statusColors[status] || 'secondary'}>{status}</Badge>;
@@ -61,7 +90,11 @@ const Orders: React.FC = () => {
           <tr>
             <th>Order ID</th>
             <th>Customer</th>
+<<<<<<< HEAD
             <th>Customer ID</th>
+=======
+            <th>Email</th>
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
             <th>Status</th>
             <th>Total</th>
             <th>Date</th>
@@ -75,6 +108,7 @@ const Orders: React.FC = () => {
             </tr>
           ) : (
             orders.map(order => (
+<<<<<<< HEAD
               <tr key={order.orderId}>
                 <td>{order.orderId}</td>
                 <td>{order.name}</td>
@@ -84,6 +118,17 @@ const Orders: React.FC = () => {
                 <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                 <td>
                   <Link to={`/orders/${order.orderId}`}>
+=======
+              <tr key={order.id}>
+                <td>{order.id}</td>
+                <td>{order.customerName}</td>
+                <td>{order.customerEmail}</td>
+                <td>{getStatusBadge(order.status)}</td>
+                <td>${order.totalAmount.toFixed(2)}</td>
+                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                <td>
+                  <Link to={`/orders/${order.id}`}>
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
                     <Button variant="primary" size="sm">View</Button>
                   </Link>
                 </td>

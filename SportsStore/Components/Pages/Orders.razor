@@ -1,5 +1,8 @@
 @page "/orders"
+<<<<<<< HEAD
 @inject CustomerIdentityService CustomerIdentityService
+=======
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
 @inject OrderService OrderService
 
 <PageTitle>My Orders - SportsStore</PageTitle>
@@ -63,6 +66,7 @@
     private List<OrderResponseDto> OrdersList { get; set; } = new();
     private bool IsLoading { get; set; } = true;
 
+<<<<<<< HEAD
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
@@ -72,6 +76,11 @@
 
         await LoadOrders();
         StateHasChanged();
+=======
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadOrders();
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
     }
 
     private async Task LoadOrders()
@@ -79,8 +88,13 @@
         IsLoading = true;
         try
         {
+<<<<<<< HEAD
             var customerId = await CustomerIdentityService.GetCustomerIdAsync();
             var orders = await OrderService.GetCustomerOrdersAsync(customerId);
+=======
+            // For demo, using a hardcoded customer ID
+            var orders = await OrderService.GetCustomerOrdersAsync("demo-customer");
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
             if (orders != null)
             {
                 OrdersList = orders;

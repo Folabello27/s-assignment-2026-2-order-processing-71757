@@ -3,7 +3,10 @@ using Serilog;
 using SportsStore.Core.Domain.Interfaces;
 using SportsStore.Core.Mapping;
 using SportsStore.Infrastructure.Messaging;
+<<<<<<< HEAD
 using SportsStore.OrderApi.Consumers;
+=======
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
 using SportsStore.OrderApi.Data;
 using SportsStore.OrderApi.Repositories;
 
@@ -70,12 +73,15 @@ var rabbitMqConnection = new RabbitMqConnection(rabbitMqHost, rabbitMqPort, rabb
 builder.Services.AddSingleton(rabbitMqConnection);
 builder.Services.AddSingleton<IEventPublisher>(sp =>
     new RabbitMqPublisher(sp.GetRequiredService<RabbitMqConnection>()));
+<<<<<<< HEAD
 builder.Services.AddHostedService<InventoryResultConsumer>();
 builder.Services.AddHostedService<InventoryFailedConsumer>();
 builder.Services.AddHostedService<PaymentResultConsumer>();
 builder.Services.AddHostedService<PaymentRejectedConsumer>();
 builder.Services.AddHostedService<ShippingResultConsumer>();
 builder.Services.AddHostedService<OrderCompletedConsumer>();
+=======
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
 
 var app = builder.Build();
 

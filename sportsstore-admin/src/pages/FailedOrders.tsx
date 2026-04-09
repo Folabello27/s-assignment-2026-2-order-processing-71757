@@ -1,10 +1,28 @@
 import React, { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import { Table, Spinner, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Order, orderApi } from '../api/orderApi';
 
 const FailedOrders: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
+=======
+import { Table, Spinner, Badge, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+
+interface FailedOrder {
+  id: number;
+  customerName: string;
+  customerEmail: string;
+  status: string;
+  totalAmount: number;
+  failureReason: string;
+  createdAt: string;
+}
+
+const FailedOrders: React.FC = () => {
+  const [orders, setOrders] = useState<FailedOrder[]>([]);
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,9 +32,17 @@ const FailedOrders: React.FC = () => {
 
   const fetchFailedOrders = async () => {
     try {
+<<<<<<< HEAD
       const data = await orderApi.getOrdersByStatus('Failed');
       setOrders(data.orders);
     } catch {
+=======
+      const response = await fetch('http://localhost:5000/api/orders/status/failed');
+      if (!response.ok) throw new Error('Failed to fetch failed orders');
+      const data = await response.json();
+      setOrders(data);
+    } catch (err) {
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
       setError('Unable to connect to Order API');
     } finally {
       setLoading(false);
@@ -54,15 +80,22 @@ const FailedOrders: React.FC = () => {
             <tr>
               <th>Order ID</th>
               <th>Customer</th>
+<<<<<<< HEAD
               <th>Customer ID</th>
               <th>Total</th>
               <th>Status</th>
+=======
+              <th>Email</th>
+              <th>Total</th>
+              <th>Failure Reason</th>
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
               <th>Date</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {orders.map(order => (
+<<<<<<< HEAD
               <tr key={order.orderId}>
                 <td>{order.orderId}</td>
                 <td>{order.name}</td>
@@ -72,6 +105,19 @@ const FailedOrders: React.FC = () => {
                 <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                 <td>
                   <Link to={`/orders/${order.orderId}`}>
+=======
+              <tr key={order.id}>
+                <td>{order.id}</td>
+                <td>{order.customerName}</td>
+                <td>{order.customerEmail}</td>
+                <td>${order.totalAmount.toFixed(2)}</td>
+                <td>
+                  <Badge bg="danger">{order.failureReason || 'Unknown error'}</Badge>
+                </td>
+                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                <td>
+                  <Link to={`/orders/${order.id}`}>
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
                     <Button variant="primary" size="sm">View Details</Button>
                   </Link>
                 </td>

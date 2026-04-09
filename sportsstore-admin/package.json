@@ -1,6 +1,7 @@
 {
   "name": "sportsstore-admin",
   "version": "0.1.0",
+<<<<<<< HEAD
   "private": true,
   "dependencies": {
     "axios": "^1.7.9",
@@ -35,4 +36,7 @@
       "last 1 safari version"
     ]
   }
+=======
+  "private": true
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
 }

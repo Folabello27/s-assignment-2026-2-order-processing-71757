@@ -1,0 +1,37 @@
+{
+  "version": 2,
+  "dgSpecHash": "htNYyFrW3RE=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\yinka\\Downloads\\fs-lab-assignment-sportstore-71757-master\\fs-lab-assignment-sportstore-71757-master\\11 - SportsStore - 5\\Beginning of Chapter\\SportsSln\\SportsStore.ShippingService\\SportsStore.ShippingService.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\yinka\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
+    "C:\\Users\\yinka\\.nuget\\packages\\fluentvalidation\\11.11.0\\fluentvalidation.11.11.0.nupkg.sha512",
+    "C:\\Users\\yinka\\.nuget\\packages\\mediatr\\12.4.1\\mediatr.12.4.1.nupkg.sha512",
+    "C:\\Users\\yinka\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
+    "C:\\Users\\yinka\\.nuget\\packages\\microsoft.extensions.dependencymodel\\8.0.0\\microsoft.extensions.dependencymodel.8.0.0.nupkg.sha512",
+    "C:\\Users\\yinka\\.nuget\\packages\\rabbitmq.client\\7.0.0\\rabbitmq.client.7.0.0.nupkg.sha512",
+    "C:\\Users\\yinka\\.nuget\\packages\\serilog\\4.1.0\\serilog.4.1.0.nupkg.sha512",
+    "C:\\Users\\yinka\\.nuget\\packages\\serilog.aspnetcore\\8.0.0\\serilog.aspnetcore.8.0.0.nupkg.sha512",
+    "C:\\Users\\yinka\\.nuget\\packages\\serilog.extensions.hosting\\8.0.0\\serilog.extensions.hosting.8.0.0.nupkg.sha512",
+    "C:\\Users\\yinka\\.nuget\\packages\\serilog.extensions.logging\\8.0.0\\serilog.extensions.logging.8.0.0.nupkg.sha512",
+    "C:\\Users\\yinka\\.nuget\\packages\\serilog.formatting.compact\\2.0.0\\serilog.formatting.compact.2.0.0.nupkg.sha512",
+    "C:\\Users\\yinka\\.nuget\\packages\\serilog.settings.configuration\\8.0.0\\serilog.settings.configuration.8.0.0.nupkg.sha512",
+    "C:\\Users\\yinka\\.nuget\\packages\\serilog.sinks.console\\6.0.0\\serilog.sinks.console.6.0.0.nupkg.sha512",
+    "C:\\Users\\yinka\\.nuget\\packages\\serilog.sinks.debug\\2.0.0\\serilog.sinks.debug.2.0.0.nupkg.sha512",
+    "C:\\Users\\yinka\\.nuget\\packages\\serilog.sinks.file\\6.0.0\\serilog.sinks.file.6.0.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'AutoMapper' 13.0.1 has a known high severity vulnerability, https://github.com/advisories/GHSA-rvv3-g6hj-g44x",
+      "projectPath": "C:\\Users\\yinka\\Downloads\\fs-lab-assignment-sportstore-71757-master\\fs-lab-assignment-sportstore-71757-master\\11 - SportsStore - 5\\Beginning of Chapter\\SportsSln\\SportsStore.ShippingService\\SportsStore.ShippingService.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\yinka\\Downloads\\fs-lab-assignment-sportstore-71757-master\\fs-lab-assignment-sportstore-71757-master\\11 - SportsStore - 5\\Beginning of Chapter\\SportsSln\\SportsStore.ShippingService\\SportsStore.ShippingService.csproj",
+      "libraryId": "AutoMapper",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
+}

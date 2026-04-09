@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+<<<<<<< HEAD
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+=======
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
 using Serilog;
 using SportsStore.Models;
 using SportsStore.Services;
@@ -30,8 +33,11 @@ builder.Services.AddHttpClient("OrderApi", client =>
 });
 
 builder.Services.AddScoped<CartService>();
+<<<<<<< HEAD
 builder.Services.AddScoped<ProtectedLocalStorage>();
 builder.Services.AddScoped<CustomerIdentityService>();
+=======
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<ProductService>();
 

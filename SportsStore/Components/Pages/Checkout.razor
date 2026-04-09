@@ -1,6 +1,9 @@
 @page "/checkout"
 @inject CartService CartService
+<<<<<<< HEAD
 @inject CustomerIdentityService CustomerIdentityService
+=======
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
 @inject OrderService OrderService
 @inject NavigationManager Navigation
 
@@ -141,7 +144,11 @@
         {
             var request = new CheckoutRequest
             {
+<<<<<<< HEAD
                 CustomerId = await CustomerIdentityService.GetCustomerIdAsync(),
+=======
+                CustomerId = Guid.NewGuid().ToString(),
+>>>>>>> d53dbaa649fb2b7845b5dc91ce1f794377a85d00
                 Name = checkoutModel.Name!,
                 Line1 = checkoutModel.Line1!,
                 Line2 = checkoutModel.Line2,

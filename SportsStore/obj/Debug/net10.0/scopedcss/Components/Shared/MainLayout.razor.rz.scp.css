@@ -1,0 +1,19 @@
+.page[b-qpsrj4f0vf] {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content[b-qpsrj4f0vf] {
+    flex: 1;
+    padding: 1rem;
+}
+
+.navbar-brand[b-qpsrj4f0vf] {
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.footer[b-qpsrj4f0vf] {
+    margin-top: auto;
+}
