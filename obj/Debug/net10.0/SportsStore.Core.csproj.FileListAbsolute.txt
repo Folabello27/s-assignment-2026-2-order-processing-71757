@@ -1,0 +1,12 @@
+/Users/joyfatungase/Downloads/Raheem111/11 - SportsStore - 5/Beginning of Chapter/SportsSln/SportsStore.Core/bin/Debug/net10.0/SportsStore.Core.deps.json
+/Users/joyfatungase/Downloads/Raheem111/11 - SportsStore - 5/Beginning of Chapter/SportsSln/SportsStore.Core/bin/Debug/net10.0/SportsStore.Core.dll
+/Users/joyfatungase/Downloads/Raheem111/11 - SportsStore - 5/Beginning of Chapter/SportsSln/SportsStore.Core/bin/Debug/net10.0/SportsStore.Core.pdb
+/Users/joyfatungase/Downloads/Raheem111/11 - SportsStore - 5/Beginning of Chapter/SportsSln/SportsStore.Core/obj/Debug/net10.0/SportsStore.Core.csproj.AssemblyReference.cache
+/Users/joyfatungase/Downloads/Raheem111/11 - SportsStore - 5/Beginning of Chapter/SportsSln/SportsStore.Core/obj/Debug/net10.0/SportsStore.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/joyfatungase/Downloads/Raheem111/11 - SportsStore - 5/Beginning of Chapter/SportsSln/SportsStore.Core/obj/Debug/net10.0/SportsStore.Core.AssemblyInfoInputs.cache
+/Users/joyfatungase/Downloads/Raheem111/11 - SportsStore - 5/Beginning of Chapter/SportsSln/SportsStore.Core/obj/Debug/net10.0/SportsStore.Core.AssemblyInfo.cs
+/Users/joyfatungase/Downloads/Raheem111/11 - SportsStore - 5/Beginning of Chapter/SportsSln/SportsStore.Core/obj/Debug/net10.0/SportsStore.Core.csproj.CoreCompileInputs.cache
+/Users/joyfatungase/Downloads/Raheem111/11 - SportsStore - 5/Beginning of Chapter/SportsSln/SportsStore.Core/obj/Debug/net10.0/SportsStore.Core.dll
+/Users/joyfatungase/Downloads/Raheem111/11 - SportsStore - 5/Beginning of Chapter/SportsSln/SportsStore.Core/obj/Debug/net10.0/refint/SportsStore.Core.dll
+/Users/joyfatungase/Downloads/Raheem111/11 - SportsStore - 5/Beginning of Chapter/SportsSln/SportsStore.Core/obj/Debug/net10.0/SportsStore.Core.pdb
+/Users/joyfatungase/Downloads/Raheem111/11 - SportsStore - 5/Beginning of Chapter/SportsSln/SportsStore.Core/obj/Debug/net10.0/ref/SportsStore.Core.dll
